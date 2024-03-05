@@ -1,5 +1,4 @@
 from cores import *
-from time import sleep
 import pygame
 import random
 
@@ -8,6 +7,8 @@ pygame.init()
 largura_tela, altura_tela = (800, 600)
 tela = pygame.display.set_mode((largura_tela, altura_tela))
 nome = pygame.display.set_caption('FAZ O QUADRADIN, E JOGA DE LADIN')
+som_errou = pygame.mixer.Sound('codigo/sons/nice-meme.wav')
+som_acertou = pygame.mixer.Sound('codigo/sons/oof-sound-effect-hd-homemadesoundeffects.wav')
 
 def cria_quadrados (n, larg, alt, espaco) : 
     if n <= 0 :
@@ -60,9 +61,11 @@ def verifica_clique (posicao, jogo, assets) :
                 if quadrados_usados[0]['cor_sorteada'] == quadrados_usados[1]['cor_sorteada'] :
                     jogo.remove(quadrados_usados[0])
                     jogo.remove(quadrados_usados[1])
+                    som_errou.play()
                 else :
                     assets['errou'] = True
                     assets['contador'] = 1000
+                    som_acertou.play()
 
 def reinicia_quadrados (assets, jogo) :
     if assets['errou'] == True :
