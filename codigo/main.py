@@ -63,8 +63,6 @@ def verifica_clique (posicao, jogo, assets) :
                 else :
                     assets['errou'] = True
                     assets['contador'] = 1000
-                    # quadrados_usados[0]['cor'] = branco
-                    # quadrados_usados[1]['cor'] = branco
 
 def reinicia_quadrados (assets, jogo) :
     if assets['errou'] == True :
@@ -105,3 +103,6 @@ while game :
     desenha_quadrados(tela, jogo)
 
     pygame.display.update()
+
+    if not jogo :
+        game = False
