@@ -1,4 +1,5 @@
 from cores import *
+from time import sleep
 import pygame
 import random
 
@@ -46,7 +47,7 @@ def desenha_quadrados (tela, jogo) :
         rect = par['rect']
         pygame.draw.rect(tela, cor, rect)
 
-def verifica_clique (posicao, jogo) :
+def verifica_clique (posicao, jogo, assets) :
     for par in jogo :
         rect = par['rect']
         if rect.collidepoint(posicao) :
@@ -54,6 +55,26 @@ def verifica_clique (posicao, jogo) :
                 par['cor'] = par['cor_sorteada']
             else :
                 par['cor'] = branco
+            quadrados_usados = [quad for quad in jogo if quad['cor'] != branco]
+            if len(quadrados_usados) == 2 :
+                if quadrados_usados[0]['cor_sorteada'] == quadrados_usados[1]['cor_sorteada'] :
+                    jogo.remove(quadrados_usados[0])
+                    jogo.remove(quadrados_usados[1])
+                else :
+                    assets['errou'] = True
+                    assets['contador'] = 1000
+                    # quadrados_usados[0]['cor'] = branco
+                    # quadrados_usados[1]['cor'] = branco
+
+def reinicia_quadrados (assets, jogo) :
+    if assets['errou'] == True :
+        assets['contador'] -= 1
+        if assets['contador'] == 0 :
+            assets['errou'] = False
+            for par in jogo :
+                par['cor'] = branco
+
+
 
 larg_quadrado = 60
 altura_quadrado = 60
@@ -64,6 +85,7 @@ jogo = cria_quadrados(n, larg_quadrado, altura_quadrado, espaco_quadrados)
 
 largura_tela = larg_quadrado * n
 altura_tela = altura_quadrado * n
+assets = {'errou' : False, 'contador' : 0}
 
 game = True
 while game :
@@ -71,13 +93,15 @@ while game :
         if event.type == pygame.QUIT :
             quit()
         elif event.type == pygame.MOUSEBUTTONDOWN :
-            if event.button == 1:
-                pos_mouse = pygame.mouse.get_pos()
-                verifica_clique(pos_mouse, jogo)
+            if assets['errou'] == False :
+                if event.button == 1:
+                    pos_mouse = pygame.mouse.get_pos()
+                    verifica_clique(pos_mouse, jogo, assets)
         
 
     
     tela.fill(preto)
+    reinicia_quadrados(assets, jogo)
     desenha_quadrados(tela, jogo)
 
     pygame.display.update()
