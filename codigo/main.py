@@ -2,6 +2,7 @@ from cores import *
 import pygame
 import random
 
+
 pygame.init()
 
 largura_tela, altura_tela = (800, 600)
@@ -9,6 +10,9 @@ tela = pygame.display.set_mode((largura_tela, altura_tela))
 nome = pygame.display.set_caption('FAZ O QUADRADIN, E JOGA DE LADIN')
 som_errou = pygame.mixer.Sound('codigo/sons/nice-meme.wav')
 som_acertou = pygame.mixer.Sound('codigo/sons/oof-sound-effect-hd-homemadesoundeffects.wav')
+
+pygame.font.init()
+fonte_segundos = pygame.font.Font(None, 40)
 
 def cria_quadrados (n, larg, alt, espaco) : 
     if n <= 0 :
@@ -82,6 +86,9 @@ altura_quadrado = 60
 n = 4
 espaco_quadrados = 10
 
+tempo = pygame.time.get_ticks()
+
+
 jogo = cria_quadrados(n, larg_quadrado, altura_quadrado, espaco_quadrados)
 
 largura_tela = larg_quadrado * n
@@ -90,6 +97,7 @@ assets = {'errou' : False, 'contador' : 0}
 
 game = True
 while game :
+    tempo_atual = pygame.time.get_ticks()
     for event in pygame.event.get() :
         if event.type == pygame.QUIT :
             quit()
@@ -104,6 +112,9 @@ while game :
     tela.fill(preto)
     reinicia_quadrados(assets, jogo)
     desenha_quadrados(tela, jogo)
+    tempo_final = (tempo_atual - tempo) // 1000
+    texto_segundos = fonte_segundos.render(f'Tempo: {tempo_final}', True, branco)
+    tela.blit(texto_segundos, (10, 10))
 
     pygame.display.update()
 
