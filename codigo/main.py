@@ -60,6 +60,23 @@ class Tela_jogo :
                 lista_quadrados.append(par)
         return lista_quadrados
 
+
+    def eventos (self) :
+        
+        for event in pygame.event.get() :
+            if event.type == pygame.QUIT :
+                return False
+            elif event.type == pygame.MOUSEBUTTONDOWN :
+                if self.assets['errou'] == False :
+                    if event.button == 1:
+                        pos_mouse = pygame.mouse.get_pos()
+                        self.verifica_clique(pos_mouse, self.jogo, self.assets)
+        return True
+
+
+
+
+
     def desenha_quadrados (self, tela, jogo) :
         for par in jogo :
             cor = par['cor']
@@ -84,6 +101,7 @@ class Tela_jogo :
                         self.assets['errou'] = True
                         self.assets['contador'] = 1000
                         self.som_acertou.play()
+    
 
     def reinicia_quadrados (self, assets, jogo) :
         if self.assets['errou'] == True :
@@ -104,25 +122,25 @@ class Tela_jogo :
         pygame.display.update()
 
 
+
+    
+
+
+
+
 tela_jogo = Tela_jogo()
 tela_jogo.inicializa()
+
 
 
 largura_tela = tela_jogo.larg_quadrado * tela_jogo.n
 altura_tela = tela_jogo.altura_quadrado * tela_jogo.n
 
-
 game = True
-while game :
-    for event in pygame.event.get() :
-        if event.type == pygame.QUIT :
-            quit()
-        elif event.type == pygame.MOUSEBUTTONDOWN :
-            if tela_jogo.assets['errou'] == False :
-                if event.button == 1:
-                    pos_mouse = pygame.mouse.get_pos()
-                    tela_jogo.verifica_clique(pos_mouse, tela_jogo.jogo, tela_jogo.assets)
 
+while game :
+    game = tela_jogo.eventos()
+   
         
         
     tela_jogo.desenha()
